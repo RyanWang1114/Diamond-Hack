@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas Lane | Search</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="panel hero-panel">
+        <div class="hero-copy">
+          <p class="eyebrow">Step 1</p>
+          <h1>Find your travel window</h1>
+          <p class="hero-text">
+            Start with a broad date range and the number of days you want to travel.
+            Atlas Lane will carry that into the detailed trip form next.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="ghost-button" href="./trip-details.html">Skip to trip form</a>
+        </div>
+      </header>
+
+      <main class="dashboard-grid">
+        <section class="panel intake-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Travel search</p>
+              <h2>Search page</h2>
+            </div>
+          </div>
+          <form id="searchWindowForm" class="trip-form">
+            <div class="form-grid window-grid">
+              <label>
+                Travel window start
+                <input id="windowStartDate" type="date" required />
+              </label>
+              <label>
+                Travel window end
+                <input id="windowEndDate" type="date" required />
+              </label>
+              <label>
+                Total travel days
+                <input id="windowTripDays" type="number" min="2" max="45" placeholder="10" required />
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="primary-button" type="submit">Next</button>
+              <p id="windowStatus" class="form-message" aria-live="polite"></p>
+            </div>
+          </form>
+        </section>
+
+        <aside class="panel insight-panel">
+          <div class="section-heading compact">
+            <div>
+              <p class="eyebrow">How it works</p>
+              <h2>Multi-page flow</h2>
+            </div>
+          </div>
+          <div class="summary-stack">
+            <div class="summary-card">
+              <h3>1. Search page</h3>
+              <p class="summary-note">Pick the broad date range and total number of days you want to travel.</p>
+            </div>
+            <div class="summary-card">
+              <h3>2. Trip details page</h3>
+              <p class="summary-note">Add your route, attraction types, baggage needs, and any must-visit places.</p>
+            </div>
+            <div class="summary-card">
+              <h3>3. Results page</h3>
+              <p class="summary-note">Review foldable sections for transportation, hotels, and tour places, then open any item on its own detail page.</p>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <button id="georgeToggle" class="george-toggle" type="button">
+      <span>George</span>
+      <small>Assistant is awake</small>
+    </button>
+
+    <section id="georgePanel" class="george-panel hidden" aria-live="polite">
+      <div class="george-header">
+        <div>
+          <p class="eyebrow">Ambient assistant</p>
+          <h2>George</h2>
+        </div>
+        <button id="closeGeorge" class="icon-button" type="button">×</button>
+      </div>
+      <div id="georgeMessages" class="george-messages"></div>
+      <div id="packingListPanel" class="packing-list-panel hidden">
+        <div class="packing-header">
+          <h3>Packing list</h3>
+          <p>George can keep this list across pages.</p>
+        </div>
+        <div id="packingListItems" class="packing-list-items"></div>
+      </div>
+      <div class="quick-prompts">
+        <button class="chip-button" data-prompt="How does this app work?" type="button">How it works</button>
+        <button class="chip-button" data-prompt="Can you help me choose travel dates?" type="button">Date help</button>
+        <button class="chip-button" data-prompt="Hi George" type="button">Say hi</button>
+      </div>
+      <form id="georgeForm" class="george-form">
+        <input id="georgeInput" type="text" placeholder="Ask George anything simple about the trip or app" autocomplete="off" />
+        <button class="primary-button" type="submit">Send</button>
+      </form>
+    </section>
+
+    <script src="./frontend/shared.js"></script>
+    <script src="./frontend/search.js"></script>
+  </body>
+</html>
