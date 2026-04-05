@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas Lane | Trip Details</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="panel hero-panel">
+        <div class="hero-copy">
+          <p class="eyebrow">Step 2</p>
+          <h1>Detailed trip information</h1>
+          <p class="hero-text">
+            Add your route, preferences, baggage details, and any places you already
+            know you want to visit. After this, Atlas Lane will open the results page.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="ghost-button" href="./index.html">Back to search</a>
+        </div>
+      </header>
+
+      <main class="dashboard-grid">
+        <section class="panel intake-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Trip form</p>
+              <h2>Traveler brief</h2>
+            </div>
+          </div>
+
+          <form id="tripDetailsForm" class="trip-form">
+            <div class="form-grid">
+              <label>
+                Origin
+                <input id="origin" type="text" placeholder="San Francisco" required />
+              </label>
+              <label>
+                Return destination
+                <input id="returnDestination" type="text" placeholder="Defaults to origin" />
+              </label>
+              <label>
+                Total travel days
+                <input id="tripDays" type="number" min="2" max="45" required />
+              </label>
+
+              <label class="wide">
+                Destinations
+                <textarea id="destinations" rows="3" placeholder="Rome, Florence, Venice"></textarea>
+                <small class="summary-note">Optional. Leave this blank if you only want a direct trip pattern.</small>
+              </label>
+
+              <label>
+                Start date
+                <input id="startDate" type="date" required />
+              </label>
+              <label>
+                End date
+                <input id="endDate" type="date" required />
+              </label>
+              <label>
+                Flight detail level
+                <select id="flightInfo">
+                  <option value="Show">Show flight-specific details</option>
+                  <option value="Hide">Hide advanced flight detail</option>
+                </select>
+              </label>
+
+              <fieldset class="wide checkbox-group">
+                <legend>Preferred attraction types</legend>
+                <label><input type="checkbox" name="attractionType" value="Natural landscapes" />Natural landscapes</label>
+                <label><input type="checkbox" name="attractionType" value="Historical monuments" />Historical monuments</label>
+                <label><input type="checkbox" name="attractionType" value="Modern architecture" />Modern architecture</label>
+                <label><input type="checkbox" name="attractionType" value="Cultural sites" />Cultural sites</label>
+                <label><input type="checkbox" name="attractionType" value="Food and cuisine" />Food and cuisine</label>
+                <label><input type="checkbox" name="attractionType" value="Adventure activities" />Adventure activities</label>
+                <label><input type="checkbox" name="attractionType" value="Other" />Other</label>
+              </fieldset>
+
+              <label class="wide">
+                Specific places
+                <textarea id="specificPlaces" rows="3" placeholder="Colosseum, TeamLab Borderless, La Boqueria"></textarea>
+              </label>
+
+              <label>
+                Number of bags
+                <input id="bagCount" type="number" min="0" max="8" value="1" />
+              </label>
+              <label>
+                Bag dimensions
+                <input id="bagDimensions" type="text" value='22" x 14" x 9"' />
+              </label>
+              <label>
+                Approx. weight per bag
+                <input id="bagWeight" type="text" value="18 lb" />
+              </label>
+
+              <label>
+                Transport priority
+                <select id="transportPriority">
+                  <option value="Cheapest">Cheapest</option>
+                  <option value="Fastest">Fastest</option>
+                  <option value="No preference">No preference</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-button" type="submit">Find a trip</button>
+              <p id="detailsStatus" class="form-message" aria-live="polite"></p>
+            </div>
+          </form>
+        </section>
+
+        <aside class="panel insight-panel">
+          <div class="section-heading compact">
+            <div>
+              <p class="eyebrow">What happens next</p>
+              <h2>Results page</h2>
+            </div>
+          </div>
+          <div class="summary-stack">
+            <div class="summary-card">
+              <h3>Separate results page</h3>
+              <p class="summary-note">The next page shows foldable search results for transportation, hotels, and tour places.</p>
+            </div>
+            <div class="summary-card">
+              <h3>Item detail pages</h3>
+              <p class="summary-note">Every result row opens its own detail page with a forecast chart and booking link.</p>
+            </div>
+            <div class="summary-card">
+              <h3>Back button friendly</h3>
+              <p class="summary-note">You can go back through the flow naturally with the browser back button.</p>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <button id="georgeToggle" class="george-toggle" type="button">
+      <span>George</span>
+      <small>Assistant is awake</small>
+    </button>
+
+    <section id="georgePanel" class="george-panel hidden" aria-live="polite">
+      <div class="george-header">
+        <div>
+          <p class="eyebrow">Ambient assistant</p>
+          <h2>George</h2>
+        </div>
+        <button id="closeGeorge" class="icon-button" type="button">×</button>
+      </div>
+      <div id="georgeMessages" class="george-messages"></div>
+      <div id="packingListPanel" class="packing-list-panel hidden">
+        <div class="packing-header">
+          <h3>Packing list</h3>
+          <p>George can build and remember this across pages.</p>
+        </div>
+        <div id="packingListItems" class="packing-list-items"></div>
+      </div>
+      <div class="quick-prompts">
+        <button class="chip-button" data-prompt="What details matter most for a good itinerary?" type="button">Form help</button>
+        <button class="chip-button" data-prompt="Can you still understand me if I type with typos?" type="button">Typos</button>
+        <button class="chip-button" data-prompt="Help me think about baggage" type="button">Baggage help</button>
+      </div>
+      <form id="georgeForm" class="george-form">
+        <input id="georgeInput" type="text" placeholder="Ask George about the form or trip" autocomplete="off" />
+        <button class="primary-button" type="submit">Send</button>
+      </form>
+    </section>
+
+    <script src="./frontend/shared.js"></script>
+    <script src="./frontend/details.js"></script>
+  </body>
+</html>
