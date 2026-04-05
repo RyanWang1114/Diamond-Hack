@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas Lane Travel Planner</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="panel hero-panel">
+        <div class="hero-copy">
+          <p class="eyebrow">Travel Planning AI Agent</p>
+          <h1>Atlas Lane</h1>
+          <p class="hero-text">
+            Build multi-city itineraries with route-aware city suggestions, price
+            signals, hotel matching, safety overlays, and an embedded travel
+            assistant named George.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button id="loadDemo" class="ghost-button" type="button">
+            Load demo trip
+          </button>
+          <button id="resetMemory" class="ghost-button" type="button">
+            Reset learned memory
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard-grid">
+        <section class="panel intake-panel">
+          <div class="section-heading">
+            <p class="eyebrow">Stage 1</p>
+            <h2>Trip input collection</h2>
+          </div>
+
+          <form id="tripForm" class="trip-form">
+            <div class="form-grid">
+              <label>
+                Origin
+                <input
+                  id="origin"
+                  name="origin"
+                  type="text"
+                  placeholder="San Francisco"
+                  required
+                />
+              </label>
+
+              <label>
+                Return destination
+                <input
+                  id="returnDestination"
+                  name="returnDestination"
+                  type="text"
+                  placeholder="Defaults to origin"
+                />
+              </label>
+
+              <label class="wide">
+                Intermediate destinations
+                <textarea
+                  id="destinations"
+                  name="destinations"
+                  rows="3"
+                  placeholder="Rome, Florence, Venice"
+                  required
+                ></textarea>
+              </label>
+
+              <label>
+                Start date
+                <input id="startDate" name="startDate" type="date" required />
+              </label>
+
+              <label>
+                End date
+                <input id="endDate" name="endDate" type="date" required />
+              </label>
+
+              <label>
+                Total travel days
+                <input
+                  id="tripDays"
+                  name="tripDays"
+                  type="number"
+                  min="2"
+                  max="45"
+                  placeholder="10"
+                  required
+                />
+              </label>
+
+              <fieldset class="wide checkbox-group">
+                <legend>Preferred attraction types</legend>
+                <label><input type="checkbox" name="attractionType" value="Natural landscapes" />Natural landscapes</label>
+                <label><input type="checkbox" name="attractionType" value="Historical monuments" />Historical monuments</label>
+                <label><input type="checkbox" name="attractionType" value="Modern architecture" />Modern architecture</label>
+                <label><input type="checkbox" name="attractionType" value="Cultural sites" />Cultural sites</label>
+                <label><input type="checkbox" name="attractionType" value="Food and cuisine" />Food and cuisine</label>
+                <label><input type="checkbox" name="attractionType" value="Adventure activities" />Adventure activities</label>
+                <label><input type="checkbox" name="attractionType" value="Other" />Other</label>
+              </fieldset>
+
+              <label class="wide">
+                Specific places
+                <textarea
+                  id="specificPlaces"
+                  name="specificPlaces"
+                  rows="3"
+                  placeholder="Colosseum, TeamLab Borderless, La Boqueria"
+                ></textarea>
+              </label>
+
+              <label>
+                Number of bags
+                <input
+                  id="bagCount"
+                  name="bagCount"
+                  type="number"
+                  min="0"
+                  max="8"
+                  value="1"
+                />
+              </label>
+
+              <label>
+                Bag dimensions
+                <input
+                  id="bagDimensions"
+                  name="bagDimensions"
+                  type="text"
+                  placeholder='22" x 14" x 9"'
+                  value='22" x 14" x 9"'
+                />
+              </label>
+
+              <label>
+                Approx. weight per bag
+                <input
+                  id="bagWeight"
+                  name="bagWeight"
+                  type="text"
+                  placeholder="18 lb"
+                  value="18 lb"
+                />
+              </label>
+
+              <label>
+                Transport priority
+                <select id="transportPriority" name="transportPriority">
+                  <option value="Cheapest">Cheapest</option>
+                  <option value="Fastest">Fastest</option>
+                  <option value="No preference">No preference</option>
+                </select>
+              </label>
+
+              <label>
+                Flight detail level
+                <select id="flightInfo" name="flightInfo">
+                  <option value="Show">Show flight-specific details</option>
+                  <option value="Hide">Hide advanced flight detail</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="primary-button" type="submit">
+                Find city additions
+              </button>
+              <p id="formMessage" class="form-message" aria-live="polite"></p>
+            </div>
+          </form>
+        </section>
+
+        <aside class="panel insight-panel">
+          <div class="section-heading compact">
+            <p class="eyebrow">Live brief</p>
+            <h2>Route memory</h2>
+          </div>
+
+          <div id="statusPills" class="status-pills"></div>
+          <div id="routeSummary" class="summary-stack"></div>
+          <div id="learningSummary" class="summary-stack"></div>
+          <div id="trustSummary" class="summary-stack"></div>
+        </aside>
+      </main>
+
+      <section id="suggestionSection" class="panel stage-panel hidden">
+        <div class="section-heading">
+          <p class="eyebrow">Stage 2</p>
+          <h2>City suggestion engine</h2>
+        </div>
+        <div id="suggestionCards" class="suggestion-grid"></div>
+        <div class="panel-footer">
+          <p class="footer-note">
+            Suggested cities are optional. Accepted stops are added to the route
+            before itinerary generation.
+          </p>
+          <button id="generatePlans" class="primary-button" type="button">
+            Generate itineraries
+          </button>
+        </div>
+      </section>
+
+      <section id="transportSection" class="panel stage-panel hidden">
+        <div class="section-heading">
+          <p class="eyebrow">Stage 3</p>
+          <h2>Flight, ground transport, and price forecast</h2>
+        </div>
+        <div id="transportContent" class="transport-stack"></div>
+      </section>
+
+      <section id="plansSection" class="panel stage-panel hidden">
+        <div class="section-heading">
+          <p class="eyebrow">Stage 4+</p>
+          <h2>Complete travel plans</h2>
+        </div>
+        <div id="plansContent" class="plans-grid"></div>
+      </section>
+    </div>
+
+    <button id="georgeToggle" class="george-toggle" type="button">
+      <span>George</span>
+      <small>Assistant is awake</small>
+    </button>
+
+    <section id="georgePanel" class="george-panel hidden" aria-live="polite">
+      <div class="george-header">
+        <div>
+          <p class="eyebrow">Ambient assistant</p>
+          <h2>George</h2>
+        </div>
+        <button id="closeGeorge" class="icon-button" type="button">×</button>
+      </div>
+
+      <div id="georgeMessages" class="george-messages"></div>
+
+      <div id="packingListPanel" class="packing-list-panel hidden">
+        <div class="packing-header">
+          <h3>Packing list</h3>
+          <p>Toggle items to mark them as personally relevant.</p>
+        </div>
+        <div id="packingListItems" class="packing-list-items"></div>
+      </div>
+
+      <div class="quick-prompts">
+        <button class="chip-button" data-prompt="Create a packing list for this trip" type="button">
+          Packing list
+        </button>
+        <button class="chip-button" data-prompt="Why were these cities suggested?" type="button">
+          Explain route logic
+        </button>
+        <button class="chip-button" data-prompt="How do I use the prohibited items panel?" type="button">
+          Explain compliance
+        </button>
+      </div>
+
+      <form id="georgeForm" class="george-form">
+        <input
+          id="georgeInput"
+          type="text"
+          placeholder="Ask George about the route, packing, or the UI"
+          autocomplete="off"
+        />
+        <button class="primary-button" type="submit">Send</button>
+      </form>
+    </section>
+
+    <div id="complianceModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" data-close-modal="true"></div>
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">Stage 6</p>
+            <h2>Prohibited items panel</h2>
+          </div>
+          <button id="closeCompliance" class="icon-button" type="button">×</button>
+        </div>
+        <div id="complianceContent" class="compliance-content"></div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
